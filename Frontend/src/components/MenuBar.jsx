@@ -16,8 +16,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import QuizIcon from '@mui/icons-material/Quiz';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 export const MenuBar = () => {
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -36,8 +38,9 @@ export const MenuBar = () => {
                         <Typography
                             variant="h6"
                             component="div"
-                            sx={{ flexGrow: 1 }}
+                            sx={{ flexGrow: 1, cursor: 'pointer' }}
                             className="menuTitle"
+                            onClick={() => navigate('/')}
                         >
                             QuizApp
                         </Typography>
@@ -49,11 +52,24 @@ export const MenuBar = () => {
                 <Box sx={{ width: 250 }} role="presentation">
                     <List>
                         {[
-                            { text: 'Profile', icon: <AccountCircleIcon /> },
-                            { text: 'Quizzes', icon: <QuizIcon /> }
-                        ].map(({ text, icon }) => (
+                            {
+                                text: 'Profile',
+                                icon: <AccountCircleIcon />,
+                                path: '/profile'
+                            },
+                            {
+                                text: 'Quizzes',
+                                icon: <QuizIcon />,
+                                path: '/quizzes'
+                            }
+                        ].map(({ text, icon, path }) => (
                             <ListItem key={text} disablePadding>
-                                <ListItemButton>
+                                <ListItemButton
+                                    onClick={() => {
+                                        setOpen(false);
+                                        navigate(path);
+                                    }}
+                                >
                                     <ListItemIcon>{icon}</ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
