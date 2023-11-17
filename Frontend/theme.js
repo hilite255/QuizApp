@@ -255,6 +255,15 @@ export default function constructTheme() {
                         }
                     }
                 }
+            },
+            MuiPagination: {
+                styleOverrides: {
+                    root: {
+                        '& .MuiButtonBase-root.Mui-selected': {
+                            color: '#F9F8F8'
+                        }
+                    }
+                }
             }
         },
         typography: {
