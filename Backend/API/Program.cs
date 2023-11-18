@@ -1,4 +1,6 @@
+using API.DbModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -11,18 +13,27 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+});
+
+builder.Services.AddScoped<DatabaseContext, DatabaseContext>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = $"https://{builder.Configuration["Auth0:Domain"]}/";
-        options.TokenValidationParameters = new TokenValidationParameters
+        //options.Authority = builder.Configuration["Auth0:Domain"];
+        options.Authority = builder.Configuration["Auth0:Domain"];
+        options.Audience = builder.Configuration["Auth0:Audience"];
+        /*options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
+            ValidateIssuer = true,
             ValidIssuer = builder.Configuration["Auth0:Domain"],
             ValidAudience = builder.Configuration["Auth0:Audience"],
-        };
+        };*/
     });
 
 var app = builder.Build();
