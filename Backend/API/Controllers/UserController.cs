@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace API.Controllers
@@ -18,10 +19,10 @@ namespace API.Controllers
 
         [HttpGet("login")]
         [Authorize]
-        public ActionResult<DbUser> Login()
+        public async Task<ActionResult<DbUser>> Login()
         {
             var id = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            var user = dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            var user = await dbcontext.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
                 user = new DbUser
@@ -30,7 +31,7 @@ namespace API.Controllers
                     Name = User.Claims.First(c => c.Type == "name").Value,
                     Email = User.Claims.First(c => c.Type == ClaimTypes.Email).Value,
                 };
-                dbcontext.Users.Add(user);
+                await dbcontext.Users.AddAsync(user);
             }
             return user;
         }

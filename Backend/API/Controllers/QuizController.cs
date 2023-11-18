@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -40,7 +41,34 @@ namespace API.Controllers
         [HttpPost("quiz")]
         public async Task<ActionResult<DbQuiz>> CreateQuiz([FromBody] CreateQuizDTO newQuiz)
         {
-            throw new NotImplementedException();
+            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            
+            var quiz = new DbQuiz()
+            {
+                Creator = dbcontext.Users.First(u => u.Id == userId),
+                Title = newQuiz.Title,
+                Duration = newQuiz.Duration,
+                StartTime = newQuiz.StartTime,
+                EndTime = newQuiz.EndTime,
+            };
+
+            var questions = new List<DbQuestion>();
+            foreach (var question in newQuiz.Questions)
+            {
+                questions.Add(new DbQuestion()
+                {
+                    Text = question.Text,
+                    Type = question.Type,
+                    Answer = question.Answer,
+                    Score = question.Score,
+                    Options = question.Options,
+                    Quiz = quiz,
+                });
+            }
+            quiz.Questions = questions;
+            await dbcontext.SaveChangesAsync();
+
+            return quiz;
         }
     }
 }
