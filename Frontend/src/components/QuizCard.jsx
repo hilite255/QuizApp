@@ -1,13 +1,17 @@
 import QuizIcon from '@mui/icons-material/Quiz.js';
-import { Box, Card, CardContent, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 
-export const QuizCard = ({ title, id }) => {
+export const QuizCard = ({ title, id, userQuizzes = false }) => {
     const navigate = useNavigate();
     return (
         <Card
             sx={{ display: 'flex', cursor: 'pointer' }}
-            onClick={() => navigate(`/quiz/${id}`)}
+            onClick={() =>
+                userQuizzes
+                    ? navigate(`/user/quiz/${id}/stats`)
+                    : navigate(`/quiz/${id}`)
+            }
         >
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                 <QuizIcon

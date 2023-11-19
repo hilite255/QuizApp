@@ -1,13 +1,17 @@
 import { QuizCard } from '../components/QuizCard.jsx';
 import { Pagination, Stack } from '@mui/material';
 
-export const QuizzesList = ({ quizzes }) => {
+export const QuizzesList = ({ quizzes, userQuizzes = false }) => {
     return (
         <>
             <Stack gap={4}>
-                {quizzes.map(quiz => {
-                    return <QuizCard title={quiz.title} id={quiz.id} />;
-                })}
+                {quizzes.map(quiz => (
+                    <QuizCard
+                        title={quiz.title}
+                        id={quiz.id}
+                        userQuizzes={userQuizzes}
+                    />
+                ))}
             </Stack>
             <div
                 style={{

@@ -252,7 +252,8 @@ export default function constructTheme() {
                         '&.menuTitle': {
                             flexGrow: 1,
                             marginBottom: 0
-                        }
+                        },
+                        color: TEXT_COLOR
                     }
                 }
             },
