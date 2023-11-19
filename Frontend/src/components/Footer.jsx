@@ -11,7 +11,7 @@ export const Footer = () => {
                 bottom: '0',
                 minWidth: 'calc(100% - 16px)',
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'flex-end',
                 alignItems: 'center'
             }}
         >
