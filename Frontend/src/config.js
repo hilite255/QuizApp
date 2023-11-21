@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:4000';
+export const BASE_URL = 'http://localhost:5000';
 export const QUESTION_DISPLAY_TYPES = {
     SIMPLE: 'Simple',
     MULTIPLE: 'Multiple Choice',

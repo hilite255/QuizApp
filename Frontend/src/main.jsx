@@ -18,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                     domain="dev-1ckx0xgt.us.auth0.com"
                     clientId="OacUI6sz6PujDRHVGFqMMQ75HegUtKbA"
                     authorizationParams={{
-                        redirect_uri: window.location.origin
+                        redirect_uri: window.location.origin,
+                        audience: 'http://quiz-app.hu/',
+                        scope: 'read:name read:current_user read:email'
                     }}
                 >
                     <Router />
