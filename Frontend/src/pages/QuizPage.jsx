@@ -9,6 +9,7 @@ export const QuizPage = ({ questions, title, time }) => {
     const [started, setStarted] = useState(false);
     const [answers, setAnswers] = useState([]);
     const [remainingTime, setRemainingTime] = useState(time);
+    const [hasEnded, setHasEnded] = useState(false);
 
     const handleNext = () => {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -18,19 +19,20 @@ export const QuizPage = ({ questions, title, time }) => {
         setActiveStep(prevActiveStep => prevActiveStep - 1);
     };
     const handleSubmit = () => {
+        setHasEnded(true);
         console.log(answers);
     };
 
     //useEffect for timer
     useEffect(() => {
         let interval = null;
-        if (started) {
+        if (started && !hasEnded) {
             interval = setInterval(() => {
                 setRemainingTime(prevState => prevState - 1);
             }, 1000);
         }
         return () => interval && clearInterval(interval);
-    }, [started]);
+    }, [started, hasEnded]);
 
     useEffect(() => {
         if (remainingTime === 0) {
@@ -43,6 +45,16 @@ export const QuizPage = ({ questions, title, time }) => {
             {started ? (
                 <>
                     <Timer time={remainingTime} big />
+                    <Button
+                        sx={{
+                            marginY: '10px',
+                            marginX: 'auto',
+                            display: 'block'
+                        }}
+                        onClick={() => handleSubmit()}
+                    >
+                        Submit
+                    </Button>
                     <MobileStepper
                         variant="progress"
                         steps={questions.length}
@@ -54,7 +66,10 @@ export const QuizPage = ({ questions, title, time }) => {
                             <Button
                                 size="small"
                                 onClick={handleNext}
-                                disabled={activeStep === questions.length - 1}
+                                disabled={
+                                    activeStep === questions.length - 1 ||
+                                    hasEnded
+                                }
                             >
                                 Next
                                 <KeyboardArrowRight />
@@ -64,7 +79,7 @@ export const QuizPage = ({ questions, title, time }) => {
                             <Button
                                 size="small"
                                 onClick={handleBack}
-                                disabled={activeStep === 0}
+                                disabled={activeStep === 0 || hasEnded}
                             >
                                 <KeyboardArrowLeft />
                                 Back
