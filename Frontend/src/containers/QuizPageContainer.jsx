@@ -28,7 +28,14 @@ export const QuizPageContainer = () => {
                 question: 'What is the capital of the United States?',
                 type: 'simple'
             }
-        ]
+        ],
+        availableTime: 60
     };
-    return <QuizPage title={data.title} questions={data.questions} />;
+    return (
+        <QuizPage
+            title={data.title}
+            questions={data.questions}
+            time={data.availableTime}
+        />
+    );
 };

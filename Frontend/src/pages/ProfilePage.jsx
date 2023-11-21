@@ -1,8 +1,9 @@
 import { UserCard } from '../components/UserCard.jsx';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { QuizzesList } from './QuizzesList.jsx';
-
+import { useNavigate } from 'react-router-dom';
 export const ProfilePage = () => {
+    const navigate = useNavigate();
     //mock user data
     const user = {
         name: 'John Doe',
@@ -27,10 +28,25 @@ export const ProfilePage = () => {
     return (
         <>
             <UserCard dbUser={user} />
-            <Typography variant="h4" sx={{ marginTop: '32px' }}>
-                My Quizzes
-            </Typography>
-            <QuizzesList quizzes={quizzes} />
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginTop: '32px',
+                    marginBottom: '16px'
+                }}
+            >
+                <Typography variant="h4" sx={{ marginBottom: 0 }}>
+                    My Quizzes
+                </Typography>
+                <Button
+                    sx={{ marginLeft: 'auto' }}
+                    onClick={() => navigate('/user/quiz/add')}
+                >
+                    Create new quiz
+                </Button>
+            </div>
+            <QuizzesList quizzes={quizzes} userQuizzes />
         </>
     );
 };

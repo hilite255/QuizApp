@@ -1,18 +1,9 @@
 import React from 'react';
 import Card from '@mui/material/Card';
-import Box from '@mui/material/Box';
-import {
-    Avatar,
-    Divider,
-    Grid,
-    IconButton,
-    Stack,
-    Typography,
-    useMediaQuery
-} from '@mui/material';
 import { Edit } from '@mui/icons-material';
+import { Avatar, IconButton, Stack, Typography, Box } from '@mui/material';
 
-export const UserCard = ({ dbUser, profilePic, openModal }) => {
+export const UserCard = ({ dbUser, profilePic }) => {
     return (
         <Card>
             <Box sx={{ p: 2, display: 'flex' }}>
@@ -29,12 +20,6 @@ export const UserCard = ({ dbUser, profilePic, openModal }) => {
                         {dbUser.email}
                     </Typography>
                 </Stack>
-                <IconButton
-                    sx={{ alignSelf: 'flex-start' }}
-                    onClick={() => openModal()}
-                >
-                    <Edit sx={{ fontSize: 26 }} />
-                </IconButton>
             </Box>
         </Card>
     );
