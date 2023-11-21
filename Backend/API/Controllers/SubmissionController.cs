@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace API.Controllers
 {
-    [Route("api/submit")]
+    [Route("api/submission")]
     [ApiController]
     public class SubmissionController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace API.Controllers
             this.dbcontext = dbcontext;
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("submit/{id}")]
         [Authorize]
         public async Task<ActionResult<DbSubmission>> Submit(int quizId, [FromBody] SubmissionDTO newSubmission)
         {
@@ -32,7 +32,7 @@ namespace API.Controllers
             {
                 var question = await dbcontext.Questions.FirstAsync(q => q.Id == answer.QuestionId);
                 var newAnswer = new DbAnswer() { Answer = answer.Answer, Question = question, Submission = submission, IsCorrect = false };
-                if (question.Type == QuestionType.MultibleChoice)
+                if (question.Type == QuestionType.MultipleChoice)
                 {
                     var wrongAnswers = new List<string>();
                     var goodAnswers = question.Answer.Split(',');
@@ -63,6 +63,12 @@ namespace API.Controllers
             await dbcontext.Submissions.AddAsync(submission);
             await dbcontext.SaveChangesAsync();
             return submission;
+        }
+
+        [HttpGet("{quizId}")]
+        public async Task<ActionResult<List<DbSubmission>>> ListSubmissionsForQuiz(int quizId)
+        {
+            return await dbcontext.Submissions.Where(s => s.Quiz.Id == quizId).ToListAsync();
         }
     }
 }
