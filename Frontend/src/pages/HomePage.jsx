@@ -6,8 +6,10 @@ export const HomePage = () => {
     const navigate = useNavigate();
     const { data, isLoading, apiCallCallback } = useApi(
         AXIOS_METHOD.GET,
-        '/api/quiz'
+        '/api/user/login'
     );
+
+    console.log(data);
     return (
         <>
             <Typography>asdfasfa</Typography>
