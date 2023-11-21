@@ -13,9 +13,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+var connectionString = builder.Configuration.GetConnectionString("Default");
+var serverVersion = ServerVersion.AutoDetect(connectionString);
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+    options.UseMySql(connectionString, serverVersion).LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging().EnableDetailedErrors();
 });
 
 builder.Services.AddScoped<DatabaseContext, DatabaseContext>();
@@ -43,7 +47,6 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<DatabaseContext>();
     context.Database.EnsureCreated();
-    context.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
