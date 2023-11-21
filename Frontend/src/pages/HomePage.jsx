@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, IconButton, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PetsIcon from '@mui/icons-material/Pets';
 import PersonIcon from '@mui/icons-material/Person';
@@ -8,46 +8,47 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 export const HomePage = () => {
     const navigate = useNavigate();
     return (
-        <>
-            <Grid container sx={{ marginTop: '24px' }}>
-                <Grid
-                    item
-                    xs={6}
-                    sx={{ display: 'flex', justifyContent: 'end' }}
+        <Grid container sx={{ marginTop: '24px' }}>
+            <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
+                <IconButton
+                    sx={{ borderRadius: '10px' }}
+                    onClick={() => navigate('/profile')}
                 >
                     <PersonIcon
                         color="primary"
                         sx={{ width: '250px', height: '250px' }}
                     />
-                </Grid>
-                <Grid item xs={6}>
+                </IconButton>
+            </Grid>
+            <Grid item xs={6}>
+                <IconButton sx={{ borderRadius: '10px' }}>
                     <QuizIcon
                         color="primary"
                         sx={{ width: '250px', height: '250px' }}
+                        onClick={() => navigate('/quizzes')}
                     />
-                </Grid>
-                <Grid
-                    item
-                    xs={6}
-                    sx={{ display: 'flex', justifyContent: 'end' }}
-                >
+                </IconButton>
+            </Grid>
+            <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
+                <IconButton sx={{ borderRadius: '10px' }}>
                     <NoteAddIcon
                         color="primary"
                         sx={{ width: '250px', height: '250px' }}
+                        onClick={() => navigate('/user/quiz/add')}
                     />
-                </Grid>
-                <Grid item xs={6}>
+                </IconButton>
+            </Grid>
+            <Grid item xs={6}>
+                <IconButton sx={{ borderRadius: '10px' }}>
                     <PetsIcon
                         color="primary"
                         sx={{ width: '250px', height: '250px' }}
+                        onClick={() =>
+                            window.open('https://cataas.com/cat', '_blank')
+                        }
                     />
-                </Grid>
+                </IconButton>
             </Grid>
-            <Typography>asdfasfa</Typography>
-            <Button onClick={() => navigate('/quiz/1')}>
-                Move to the quiz page
-            </Button>
-            <Button onClick={() => apiCallCallback()}>test</Button>
-        </>
+        </Grid>
     );
 };
