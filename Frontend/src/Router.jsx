@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Button, CircularProgress, Container, Typography } from '@mui/material';
 import { HomePage } from './pages/HomePage.jsx';
@@ -15,7 +15,23 @@ import { Redirect } from './components/Redirect.jsx';
 import { QuizStatsPageContainer } from './containers/QuizStatsPageContainer.jsx';
 
 export const Router = () => {
-    const { isLoading, isAuthenticated } = useAuth0();
+    const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const localAccessToken = await getAccessTokenSilently({
+                    authorizationParams: {
+                        audience: 'http://quiz-app.hu/',
+                        consent: 'read:name read:current_user'
+                    }
+                });
+                localStorage.setItem('accessToken', localAccessToken);
+            } catch (err) {
+                console.error(err);
+            }
+        })();
+    }, [getAccessTokenSilently]);
 
     if (isLoading) {
         return (
