@@ -12,12 +12,13 @@ namespace API.DbModels
         public string Text { get; set; }
         public string Answer { get; set; }
         public int Score { get; set; }
+        public string[]? Options { get; set; }
     }
 
     public enum QuestionType
     {
         TrueFalse,
-        MultibleChoice,
+        MultipleChoice,
         Simple,
     }
 }
