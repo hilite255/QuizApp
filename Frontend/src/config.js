@@ -10,3 +10,9 @@ export const QUESTION_TYPES = {
     MULTIPLE: 'multipleChoice',
     TRUE_FALSE: 'trueFalse'
 };
+
+export const AUTH0_CONFIG = {
+    DOMAIN: 'dev-1ckx0xgt.us.auth0.com',
+    CLIENT_ID: 'OacUI6sz6PujDRHVGFqMMQ75HegUtKbA',
+    AUDIENCE: 'http://quiz-app.hu/'
+};
