@@ -15,24 +15,7 @@ import { Redirect } from './components/Redirect.jsx';
 import { QuizStatsPageContainer } from './containers/QuizStatsPageContainer.jsx';
 
 export const Router = () => {
-    const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const localAccessToken = await getAccessTokenSilently({
-                    authorizationParams: {
-                        audience: 'http://quiz-app.hu/',
-                        consent:
-                            'read:name read:current_user read:email profile'
-                    }
-                });
-                localStorage.setItem('accessToken', localAccessToken);
-            } catch (err) {
-                console.error(err);
-            }
-        })();
-    }, [getAccessTokenSilently]);
+    const { isLoading, isAuthenticated } = useAuth0();
 
     if (isLoading) {
         return (
