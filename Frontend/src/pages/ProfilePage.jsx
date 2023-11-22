@@ -27,7 +27,7 @@ export const ProfilePage = () => {
 
     return (
         <>
-            <UserCard dbUser={user} />
+            <UserCard />
             <div
                 style={{
                     display: 'flex',

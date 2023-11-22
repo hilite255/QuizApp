@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                     authorizationParams={{
                         redirect_uri: window.location.origin,
                         audience: 'http://quiz-app.hu/',
-                        scope: 'read:name read:current_user read:email'
+                        scope: 'read:name read:current_user read:email profile'
                     }}
                 >
                     <Router />

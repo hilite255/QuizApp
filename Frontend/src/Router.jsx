@@ -23,7 +23,8 @@ export const Router = () => {
                 const localAccessToken = await getAccessTokenSilently({
                     authorizationParams: {
                         audience: 'http://quiz-app.hu/',
-                        consent: 'read:name read:current_user'
+                        consent:
+                            'read:name read:current_user read:email profile'
                     }
                 });
                 localStorage.setItem('accessToken', localAccessToken);
