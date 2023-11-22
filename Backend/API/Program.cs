@@ -12,12 +12,9 @@ var AllowedOrigins = "_Allowed_";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(AllowedOrigins, builder =>
-    {
-        builder.SetIsOriginAllowed(origin => true);
-        builder.AllowAnyHeader();
-        builder.AllowAnyMethod();
-        builder.AllowCredentials();
-    });
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader());
 });
 
 builder.Services.AddControllers();
@@ -68,12 +65,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
+app.UseRouting();
+app.UseCors(AllowedOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors(AllowedOrigins);
 
 app.Run();

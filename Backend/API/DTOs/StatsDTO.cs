@@ -16,7 +16,7 @@ namespace API.DTOs
         public string QuestionType { get; set;}
         public int Correct { get; set;}
         public int Wrong { get; set;}
-        public Dictionary<int, int> Answers { get; set; }
+        public Dictionary<string, int> Answers { get; set; }
         public string[]? Options { get; set;}
     }
 }
