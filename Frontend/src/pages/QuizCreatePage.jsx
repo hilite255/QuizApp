@@ -21,7 +21,7 @@ export const QuizCreatePage = () => {
             questions,
             startTime: fromDate,
             endTime: toDate,
-            duration
+            duration: { seconds: duration }
         }).catch(err => console.log(err));
     };
 
