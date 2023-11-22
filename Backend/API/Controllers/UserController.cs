@@ -38,6 +38,7 @@ namespace API.Controllers
                     Email = userDetails.Email,
                 };
                 await dbcontext.Users.AddAsync(user);
+                await dbcontext.SaveChangesAsync();
             }
             return user;
         }

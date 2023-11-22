@@ -60,7 +60,7 @@ namespace API.Controllers
             }
             var userId = userIdClaim.Value;
             var creator = dbcontext.Users.FirstOrDefault(u => u.Id == userId);
-            if (userId == null)
+            if (creator == null)
             {
                 throw new ArgumentNullException("User", "Nincs user ilyen Id-val");
             }
@@ -68,26 +68,34 @@ namespace API.Controllers
             var quiz = new DbQuiz()
             {
                 Creator = creator,
-                Title = newQuiz.Title,
-                Duration = newQuiz.Duration,
-                StartTime = newQuiz.StartTime,
-                EndTime = newQuiz.EndTime,
+                Title = newQuiz.title,
+                Duration = new TimeSpan(0, 0, newQuiz.duration),
+                StartTime = DateTime.Parse(newQuiz.startTime),
+                EndTime = DateTime.Parse(newQuiz.endTime),
             };
 
             var questions = new List<DbQuestion>();
-            foreach (var question in newQuiz.Questions)
+            foreach (var question in newQuiz.questions)
             {
+                QuestionType qtype;
+                switch (question.type.ToLower())
+                {
+                    case "simple": qtype = QuestionType.Simple; break;
+                    case "multiplechoice": qtype = QuestionType.MultipleChoice; break;
+                    case "truefalse": qtype = QuestionType.TrueFalse; break;
+                    default: qtype = QuestionType.Simple; break;
+                }
                 questions.Add(new DbQuestion()
                 {
-                    Text = question.Text,
-                    Type = question.Type,
-                    Answer = question.Answer,
-                    Score = question.Score,
-                    Options = question.Options,
+                    Text = question.text,
+                    Type = qtype,
+                    Answer = question.answer,
+                    Score = question.score,
+                    Options = question.options,
                     Quiz = quiz,
                 });
             }
-            quiz.Questions = questions;
+            await dbcontext.Quizzes.AddAsync(quiz);
             await dbcontext.SaveChangesAsync();
 
             return quiz;
