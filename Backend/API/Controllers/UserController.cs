@@ -1,4 +1,5 @@
 ﻿using API.DbModels;
+using API.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,19 +18,24 @@ namespace API.Controllers
             this.dbcontext = dbcontext;
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         [Authorize]
-        public async Task<ActionResult<DbUser>> Login()
+        public async Task<ActionResult<DbUser>> Login([FromBody] LoginDTO userDetails)
         {
-            var id = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var idClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (idClaim == null)
+            {
+                throw new ArgumentNullException("Id", "Nincs Id a tokenben");
+            }
+            var id = idClaim.Value;
             var user = await dbcontext.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
                 user = new DbUser
                 {
-                    Id = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
-                    Name = User.Claims.First(c => c.Type == "name").Value,
-                    Email = User.Claims.First(c => c.Type == ClaimTypes.Email).Value,
+                    Id = id,
+                    Name = userDetails.Name,
+                    Email = userDetails.Email,
                 };
                 await dbcontext.Users.AddAsync(user);
             }

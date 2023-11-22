@@ -34,20 +34,40 @@ namespace API.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<List<DbQuiz>>> ListQuizzes()
+        public async Task<ActionResult<QuizListDTO>> ListQuizzes(int page, int perpage)
         {
-            return await dbcontext.Quizzes.ToListAsync();
+            var count = dbcontext.Quizzes.Count();
+            var list = await dbcontext.Quizzes.Skip((page - 1) * perpage).Take(perpage).ToListAsync();
+            return new QuizListDTO() { Count = count, Quizzes = list };
+        }
+
+        [HttpGet("all/{userId}")]
+        public async Task<ActionResult<QuizListDTO>> GetQuizzesForUser(int page, int perpage, string userId)
+        {
+            var count = dbcontext.Quizzes.Where(q => q.Creator.Id == userId).Count();
+            var list = await dbcontext.Quizzes.Where(q => q.Creator.Id == userId).Skip((page - 1) * perpage).Take(perpage).ToListAsync();
+            return new QuizListDTO() { Count = count, Quizzes = list };
         }
 
         [Authorize]
         [HttpPost("create")]
         public async Task<ActionResult<DbQuiz>> CreateQuiz([FromBody] CreateQuizDTO newQuiz)
         {
-            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                throw new ArgumentNullException("Id", "Nincs Id a tokenben");
+            }
+            var userId = userIdClaim.Value;
+            var creator = dbcontext.Users.FirstOrDefault(u => u.Id == userId);
+            if (userId == null)
+            {
+                throw new ArgumentNullException("User", "Nincs user ilyen Id-val");
+            }
+
             var quiz = new DbQuiz()
             {
-                Creator = dbcontext.Users.First(u => u.Id == userId),
+                Creator = creator,
                 Title = newQuiz.Title,
                 Duration = newQuiz.Duration,
                 StartTime = newQuiz.StartTime,
@@ -106,7 +126,7 @@ namespace API.Controllers
                 questionStats.Wrong = wrong;
                 if (question.Type == QuestionType.TrueFalse)
                 {
-                    questionStats.Answers = new Dictionary<int, int>();
+                    questionStats.Answers = new Dictionary<string, int>();
                     int trueAnswer = 0;
                     int falseAnswer = 0;
                     foreach (var answer in answers)
@@ -120,17 +140,17 @@ namespace API.Controllers
                             falseAnswer++;
                         }
                     }
-                    questionStats.Answers.Add(0, trueAnswer);
-                    questionStats.Answers.Add(1, falseAnswer);
+                    questionStats.Answers.Add("0", trueAnswer);
+                    questionStats.Answers.Add("1", falseAnswer);
                     questionStats.Options = question.Options;
                 }
                 if (question.Type == QuestionType.MultipleChoice)
                 {
                     questionStats.Options = question.Options;
-                    questionStats.Answers = new Dictionary<int, int>();
+                    questionStats.Answers = new Dictionary<string, int>();
                     for (int i = 0; i < question.Options.Length; i++)
                     {
-                        questionStats.Answers.Add(i, 0);
+                        questionStats.Answers.Add(i.ToString(), 0);
                     }
                     foreach(var answer in answers)
                     {
@@ -138,8 +158,23 @@ namespace API.Controllers
                         {
                             if (answer.Answer.ToLower().Contains((char)('a' + i)))
                             {
-                                questionStats.Answers[i] += 1;
+                                questionStats.Answers[i.ToString()] += 1;
                             }
+                        }
+                    }
+                }
+                if (question.Type == QuestionType.Simple)
+                {
+                    questionStats.Answers = new Dictionary<string, int>();
+                    foreach(var answer in answers)
+                    {
+                        if (questionStats.Answers.ContainsKey(answer.Answer))
+                        {
+                            questionStats.Answers[answer.Answer] += 1;
+                        }
+                        else
+                        {
+                            questionStats.Answers.Add(answer.Answer, 1);
                         }
                     }
                 }
