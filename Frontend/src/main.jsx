@@ -5,6 +5,8 @@ import { Router } from './Router.jsx';
 import { responsiveFontSizes, ThemeProvider } from '@mui/material';
 import constructTheme from '../theme.js';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { AUTH0_CONFIG } from './config.js';
+import { AuthContextProvider } from './hooks/useAuth.jsx';
 import('../styles/index.styl');
 
 let theme = constructTheme();
@@ -15,15 +17,17 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <BrowserRouter>
             <ThemeProvider theme={theme}>
                 <Auth0Provider
-                    domain="dev-1ckx0xgt.us.auth0.com"
-                    clientId="OacUI6sz6PujDRHVGFqMMQ75HegUtKbA"
+                    domain={AUTH0_CONFIG.DOMAIN}
+                    clientId={AUTH0_CONFIG.CLIENT_ID}
                     authorizationParams={{
                         redirect_uri: window.location.origin,
-                        audience: 'http://quiz-app.hu/',
-                        scope: 'read:name read:current_user read:email profile'
+                        audience: AUTH0_CONFIG.AUDIENCE,
+                        scope: 'openid profile email'
                     }}
                 >
-                    <Router />
+                    <AuthContextProvider>
+                        <Router />
+                    </AuthContextProvider>
                 </Auth0Provider>
             </ThemeProvider>
         </BrowserRouter>
