@@ -12,7 +12,7 @@ export const HomePage = () => {
             <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
                 <IconButton
                     sx={{ borderRadius: '10px' }}
-                    onClick={() => navigate('/profile')}
+                    onClick={() => navigate('/user')}
                 >
                     <PersonIcon
                         color="primary"
