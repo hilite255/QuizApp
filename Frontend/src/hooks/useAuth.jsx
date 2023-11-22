@@ -32,11 +32,8 @@ export function AuthContextProvider({ children }) {
                 setDbUser(parsedUserInfo);
 
                 await doApiCall('POST', '/api/user/login', {
-                    user: {
-                        email: parsedUserInfo.email,
-                        name: parsedUserInfo.name,
-                        picture: parsedUserInfo.picture
-                    }
+                    email: parsedUserInfo.email,
+                    name: parsedUserInfo.name
                 });
             } catch (err) {
                 console.error(err);
