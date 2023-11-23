@@ -10,12 +10,14 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { QUESTION_DISPLAY_TYPES, QUESTION_TYPES } from '../config.js';
+import ClearIcon from '@mui/icons-material/Clear';
 
-export const QuestionCreateCard = ({ setParams }) => {
+export const QuestionCreateCard = ({ setParams, removeQuestion }) => {
     const [type, setType] = useState(QUESTION_DISPLAY_TYPES.SIMPLE);
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
     const [options, setOptions] = useState([]);
+    const [score, setScore] = useState(1);
     const handleTypeChange = event => {
         const newValue = event.target.value;
         if (newValue === QUESTION_TYPES.MULTIPLE) {
@@ -34,9 +36,10 @@ export const QuestionCreateCard = ({ setParams }) => {
                 type === QUESTION_DISPLAY_TYPES.MULTIPLE
                     ? JSON.stringify(answer)
                     : answer,
-            options
+            options,
+            score
         });
-    }, [question, type, answer, options]);
+    }, [question, type, answer, options, score]);
 
     const handleOptionsChange = (index, value) => {
         setOptions(prevState => {
@@ -51,7 +54,7 @@ export const QuestionCreateCard = ({ setParams }) => {
             <Stack gap={4} sx={{ width: '50%' }}>
                 <TextField
                     variant="standard"
-                    placeholder="Question"
+                    label="Question"
                     onChange={e => setQuestion(e.target.value)}
                 />
                 <FormControl sx={{ maxWidth: 'maxContent' }}>
@@ -73,7 +76,7 @@ export const QuestionCreateCard = ({ setParams }) => {
                     <TextField
                         onChange={e => setAnswer(e.target.value)}
                         variant="standard"
-                        placeholder="Answer"
+                        label="Answer"
                     />
                 )}
                 {type === QUESTION_TYPES.MULTIPLE && (
@@ -136,6 +139,18 @@ export const QuestionCreateCard = ({ setParams }) => {
                     </div>
                 )}
             </Stack>
+            <TextField
+                label="Score"
+                variant="standard"
+                type="number"
+                onChange={e => setScore(parseInt(e.target.value, 10))}
+                sx={{ margin: '0 auto' }}
+            />
+            <ClearIcon
+                color="error"
+                style={{ cursor: 'pointer', marginLeft: 'auto' }}
+                onClick={removeQuestion}
+            />
         </Paper>
     );
 };
