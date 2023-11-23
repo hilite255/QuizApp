@@ -21,6 +21,10 @@ namespace API.DTOs
             EndTime = quiz.EndTime;
             Duration = quiz.Duration;
             Questions = questions;
+            foreach (var q in Questions)
+            {
+                q.Answer = "";
+            }
         }
     }
 }
