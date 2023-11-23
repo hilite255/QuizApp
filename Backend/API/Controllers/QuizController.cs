@@ -20,7 +20,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<DbQuiz>> GetQuiz(int id)
+        public async Task<ActionResult<QuizWithQuestions>> GetQuiz(int id)
         {
             var quiz = await dbcontext.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
             if (quiz == null)
@@ -29,8 +29,23 @@ namespace API.Controllers
             }
             else
             {
-                return quiz;
+                var questions = await dbcontext.Questions.Where(q => q.Quiz.Id == quiz.Id).ToListAsync();
+                return new QuizWithQuestions(quiz, questions);
             }
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<NoContentResult> Delete(int id)
+        {
+            var quiz = await dbcontext.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
+            if (quiz != null)
+            {
+                dbcontext.Quizzes.Remove(quiz);
+                await dbcontext.SaveChangesAsync();
+            }
+
+            return new NoContentResult();
         }
 
         [HttpGet("all")]
