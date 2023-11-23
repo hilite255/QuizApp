@@ -9,13 +9,9 @@ namespace API.DbModels
 
         [ForeignKey("UserId")]
         public DbUser Creator { get; set; }
-
-        [ForeignKey("QuestionId")]
-        public ICollection<DbQuestion> Questions { get; set; }
-
         public string Title { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public TimeSpan Duration { get; set; }
+        public int Duration { get; set; }
     }
 }

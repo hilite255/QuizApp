@@ -41,9 +41,16 @@ namespace API.Controllers
             return new QuizListDTO() { Count = count, Quizzes = list };
         }
 
-        [HttpGet("all/{userId}")]
-        public async Task<ActionResult<QuizListDTO>> GetQuizzesForUser(int page, int perpage, string userId)
+        [Authorize]
+        [HttpGet("all/user")]
+        public async Task<ActionResult<QuizListDTO>> GetQuizzesForUser(int page, int perpage)
         {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                throw new ArgumentNullException("Id", "Nincs Id a tokenben");
+            }
+            var userId = userIdClaim.Value;
             var count = dbcontext.Quizzes.Where(q => q.Creator.Id == userId).Count();
             var list = await dbcontext.Quizzes.Where(q => q.Creator.Id == userId).Skip((page - 1) * perpage).Take(perpage).ToListAsync();
             return new QuizListDTO() { Count = count, Quizzes = list };
@@ -59,7 +66,7 @@ namespace API.Controllers
                 throw new ArgumentNullException("Id", "Nincs Id a tokenben");
             }
             var userId = userIdClaim.Value;
-            var creator = dbcontext.Users.FirstOrDefault(u => u.Id == userId);
+            var creator = await dbcontext.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (creator == null)
             {
                 throw new ArgumentNullException("User", "Nincs user ilyen Id-val");
@@ -69,7 +76,7 @@ namespace API.Controllers
             {
                 Creator = creator,
                 Title = newQuiz.title,
-                Duration = new TimeSpan(0, 0, newQuiz.duration),
+                Duration = newQuiz.duration,
                 StartTime = DateTime.Parse(newQuiz.startTime),
                 EndTime = DateTime.Parse(newQuiz.endTime),
             };
@@ -87,13 +94,17 @@ namespace API.Controllers
                 }
                 questions.Add(new DbQuestion()
                 {
-                    Text = question.text,
+                    Text = question.question,
                     Type = qtype,
                     Answer = question.answer,
                     Score = question.score,
                     Options = question.options,
                     Quiz = quiz,
                 });
+            }
+            foreach (var q in questions)
+            {
+                await dbcontext.Questions.AddAsync(q);
             }
             await dbcontext.Quizzes.AddAsync(quiz);
             await dbcontext.SaveChangesAsync();
@@ -106,11 +117,12 @@ namespace API.Controllers
         public async Task<ActionResult<StatsDTO>> GetStats(int quizId)
         {
             var quizStats = new StatsDTO();
-            var quiz = await dbcontext.Quizzes.Include(q => q.Questions).Include(q => q.Creator).FirstAsync(q => q.Id == quizId);
+            var quiz = await dbcontext.Quizzes.Include(q => q.Creator).FirstAsync(q => q.Id == quizId);
+            var questions = await dbcontext.Questions.Where(q => q.Id == quiz.Id).ToListAsync();
             quizStats.QuizId = quizId;
             quizStats.QuizTitle = quiz.Title;
             quizStats.Questions = new List<QuestionStatDTO>();
-            foreach (var question in quiz.Questions)
+            foreach (var question in questions)
             {
                 var questionStats = new QuestionStatDTO();
                 questionStats.QuestionId = question.Id;

@@ -13,7 +13,7 @@ namespace API.DTOs
 
     public class QuestionDTO
     {
-        public string text { get; set; }
+        public string question { get; set; }
         public string answer { get; set; }
         public int score { get; set; } = 1;
         public string[] options { get; set; }

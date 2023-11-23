@@ -11,7 +11,6 @@ namespace API.DbModels
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DbQuiz>().HasOne(e => e.Creator).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<DbQuiz>().HasMany(e => e.Questions).WithOne(e => e.Quiz);
             modelBuilder.Entity<DbSubmission>().HasOne(e => e.User).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<DbAnswer>().HasOne(e => e.Submission).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<DbQuestion>()
