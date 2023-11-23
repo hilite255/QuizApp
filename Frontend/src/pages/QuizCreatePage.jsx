@@ -11,8 +11,11 @@ export const QuizCreatePage = () => {
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
 
-    const addQuestion = (question, type, answer, options) => {
-        setQuestions([...questions, { question, type, answer, options }]);
+    const addQuestion = (question, type, answer, options, score) => {
+        setQuestions([
+            ...questions,
+            { question, type, answer, options, score }
+        ]);
     };
 
     const handleSubmit = () => {
@@ -48,7 +51,7 @@ export const QuizCreatePage = () => {
                 <TextField
                     label="Duration in seconds"
                     variant="outlined"
-                    onChange={e => setDuration(e.target.value)}
+                    onChange={e => setDuration(parseInt(e.target.value, 10))}
                     type="number"
                 />
             </Grid>
@@ -70,8 +73,8 @@ export const QuizCreatePage = () => {
                     type="date"
                 />
             </Grid>
-            <Grid item xs={12}>
-                {questions.map((question, index) => (
+            {questions.map((question, index) => (
+                <Grid item xs={12}>
                     <QuestionCreateCard
                         setParams={newValue =>
                             setQuestions(prevState => {
@@ -80,10 +83,14 @@ export const QuizCreatePage = () => {
                                 return newState;
                             })
                         }
+                        removeQuestion={() => {
+                            const newState = [...questions];
+                            newState.splice(index, 1);
+                            setQuestions(newState);
+                        }}
                     />
-                ))}
-            </Grid>
-
+                </Grid>
+            ))}
             <Grid item xs={12}>
                 <Button
                     onClick={() =>
