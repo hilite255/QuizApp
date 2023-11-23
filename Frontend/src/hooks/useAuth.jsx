@@ -10,6 +10,7 @@ const AuthContext = React.createContext();
 export function AuthContextProvider({ children }) {
     const { isLoading, getAccessTokenSilently, isAuthenticated } = useAuth0();
     const [dbUser, setDbUser] = useState(null);
+    const [isUserLoading, setIsUserLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -29,19 +30,25 @@ export function AuthContextProvider({ children }) {
                 );
 
                 const parsedUserInfo = await metadataResponse.json();
-                setDbUser(parsedUserInfo);
 
-                await doApiCall('POST', '/api/user/login', {
-                    email: parsedUserInfo.email,
-                    name: parsedUserInfo.name
-                });
+                const userFromBackend = await doApiCall(
+                    'POST',
+                    '/api/user/login',
+                    {
+                        email: parsedUserInfo.email,
+                        name: parsedUserInfo.name
+                    }
+                );
+                setDbUser(userFromBackend);
+                setIsUserLoading(false);
             } catch (err) {
                 console.error(err);
+                setIsUserLoading(false);
             }
         })();
     }, [getAccessTokenSilently, isAuthenticated]);
 
-    if (isLoading) {
+    if (isLoading || isUserLoading) {
         return (
             <Container
                 sx={{
