@@ -7,6 +7,7 @@ import constructTheme from '../theme.js';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { AUTH0_CONFIG } from './config.js';
 import { AuthContextProvider } from './hooks/useAuth.jsx';
+import { MessageContextProvider } from './hooks/useMessage.jsx';
 import('../styles/index.styl');
 
 let theme = constructTheme();
@@ -26,7 +27,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                     }}
                 >
                     <AuthContextProvider>
-                        <Router />
+                        <MessageContextProvider>
+                            <Router />
+                        </MessageContextProvider>
                     </AuthContextProvider>
                 </Auth0Provider>
             </ThemeProvider>
