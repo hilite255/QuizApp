@@ -18,7 +18,7 @@ namespace API.Controllers
             this.dbcontext = dbcontext;
         }
 
-        [HttpPost("submit/{id}")]
+        [HttpPost("submit/{quizId}")]
         [Authorize]
         public async Task<ActionResult<DbSubmission>> Submit(int quizId, [FromBody] SubmissionDTO newSubmission)
         {
