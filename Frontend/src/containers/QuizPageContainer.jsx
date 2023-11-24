@@ -1,41 +1,28 @@
 import { QuizPage } from '../pages/QuizPage.jsx';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { doApiCall } from '../apiCall.js';
 
 export const QuizPageContainer = () => {
-    //mock grabbing the data
-    const data = {
-        id: 1,
-        title: 'Quiz 1',
-        questions: [
-            {
-                id: 1,
-                question: 'What is the capital of the United States?',
-                type: 'multipleChoice',
-                options: [
-                    'New York',
-                    'Washington, D.C.',
-                    'Los Angeles',
-                    'Chicago'
-                ]
-            },
-            {
-                id: 2,
-                question:
-                    'Is Washington, D.C. the capital of the United States?',
-                type: 'trueFalse'
-            },
-            {
-                id: 3,
-                question: 'What is the capital of the United States?',
-                type: 'simple'
-            }
-        ],
-        availableTime: 60
-    };
+    const { id } = useParams();
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            const data = await doApiCall('GET', `/api/quiz/${id}`);
+            setData(data);
+        })();
+    }, [id]);
+
+    if (!data) {
+        return null;
+    }
     return (
         <QuizPage
             title={data.title}
             questions={data.questions}
-            time={data.availableTime}
+            time={data.duration}
+            id={id}
         />
     );
 };

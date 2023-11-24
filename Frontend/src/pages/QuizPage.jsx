@@ -3,13 +3,18 @@ import { Button, MobileStepper, Stack, Typography } from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { QuestionContainer } from '../components/QuestionContainer.jsx';
 import { Timer } from '../components/Timer.jsx';
+import { doApiCall } from '../apiCall.js';
+import { useNavigate } from 'react-router-dom';
+import { useMessage } from '../hooks/useMessage.jsx';
 
-export const QuizPage = ({ questions, title, time }) => {
+export const QuizPage = ({ questions, title, time, id }) => {
     const [activeStep, setActiveStep] = useState(0);
     const [started, setStarted] = useState(false);
     const [answers, setAnswers] = useState([]);
     const [remainingTime, setRemainingTime] = useState(time);
     const [hasEnded, setHasEnded] = useState(false);
+    const navigate = useNavigate();
+    const { displayMessage } = useMessage();
 
     const handleNext = () => {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -20,7 +25,18 @@ export const QuizPage = ({ questions, title, time }) => {
     };
     const handleSubmit = () => {
         setHasEnded(true);
-        console.log(answers);
+        doApiCall('POST', `/api/submission/submit/${id}`, {
+            answers
+        })
+            .then(() => {
+                navigate('/user');
+                displayMessage('Quiz submitted successfully', true);
+            })
+            .catch(err => {
+                navigate('/user');
+                displayMessage('Quiz submission failed', false);
+                console.log(err);
+            });
     };
 
     //useEffect for timer
@@ -99,7 +115,7 @@ export const QuizPage = ({ questions, title, time }) => {
                                 setAnswers(prevState => {
                                     const newState = [...prevState];
                                     newState[activeStep] = {
-                                        id: questions[activeStep].id,
+                                        questionId: questions[activeStep].id,
                                         answer
                                     };
                                     return newState;

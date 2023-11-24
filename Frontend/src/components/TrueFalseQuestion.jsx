@@ -1,8 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
 
-export const TrueFalseQuestion = ({ question }) => {
-    const [answer, setAnswer] = useState(null);
+export const TrueFalseQuestion = ({ question, setAnswer }) => {
+    const [localAnswer, setLocalAnswer] = useState(null);
+
+    useEffect(() => {
+        if (localAnswer === null) {
+            return;
+        }
+        setAnswer(localAnswer.toString());
+    }, [localAnswer]);
     return (
         <>
             <Typography variant="h5">{question}</Typography>
@@ -13,9 +20,11 @@ export const TrueFalseQuestion = ({ question }) => {
                     sx={{ display: 'flex', justifyContent: 'end' }}
                 >
                     <Button
-                        color={answer === true ? 'primary' : 'secondary'}
+                        color={localAnswer === true ? 'primary' : 'secondary'}
                         onClick={() =>
-                            answer !== true ? setAnswer(true) : setAnswer(null)
+                            localAnswer !== true
+                                ? setLocalAnswer(true)
+                                : setLocalAnswer(null)
                         }
                         size="large"
                         style={{
@@ -31,11 +40,11 @@ export const TrueFalseQuestion = ({ question }) => {
                     sx={{ display: 'flex', justifyContent: 'start' }}
                 >
                     <Button
-                        color={answer === false ? 'primary' : 'secondary'}
+                        color={localAnswer === false ? 'primary' : 'secondary'}
                         onClick={() =>
-                            answer !== false
-                                ? setAnswer(false)
-                                : setAnswer(null)
+                            localAnswer !== false
+                                ? setLocalAnswer(false)
+                                : setLocalAnswer(null)
                         }
                         size="large"
                     >

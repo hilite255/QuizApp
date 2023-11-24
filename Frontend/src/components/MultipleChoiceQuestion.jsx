@@ -1,10 +1,14 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const CHOICES = ['A', 'B', 'C', 'D'];
 
-export const MultipleChoiceQuestion = ({ question, options }) => {
-    const [selectedChoice, setSelectedChoice] = useState(() => []); // [A, B, C, D
+export const MultipleChoiceQuestion = ({ question, options, setAnswer }) => {
+    const [selectedChoice, setSelectedChoice] = useState(() => []); // [A, B, C, D]
+
+    useEffect(() => {
+        setAnswer(selectedChoice.join(','));
+    }, [selectedChoice]);
 
     return (
         <>

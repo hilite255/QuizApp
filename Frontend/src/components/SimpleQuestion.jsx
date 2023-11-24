@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { TextField, Typography } from '@mui/material';
 
-export const SimpleQuestion = ({ question }) => {
-    const [answer, setAnswer] = useState(null);
+export const SimpleQuestion = ({ question, setAnswer }) => {
     return (
         <>
             <Typography variant="h5" sx={{ marginBottom: '48px' }}>
@@ -13,7 +12,7 @@ export const SimpleQuestion = ({ question }) => {
                 variant="outlined"
                 multiline
                 maxRows={4}
-                onChange={({ target }) => setAnswer(target.value)}
+                onChange={({ target }) => target && setAnswer(target.value)}
             />
         </>
     );
