@@ -29,11 +29,11 @@ export const QuizPage = ({ questions, title, time, id }) => {
             answers
         })
             .then(() => {
-                navigate('/user');
+                navigate('/quizzes');
                 displayMessage('Quiz submitted successfully', true);
             })
             .catch(err => {
-                navigate('/user');
+                navigate('/quizzes');
                 displayMessage('Quiz submission failed', false);
                 console.log(err);
             });
