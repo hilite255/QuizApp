@@ -1,9 +1,22 @@
 import QuizIcon from '@mui/icons-material/Quiz.js';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, Typography, Box } from '@mui/material';
+import { Card, CardContent, Typography, Box, IconButton } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import { doApiCall } from '../apiCall.js';
+import { useMessage } from '../hooks/useMessage.jsx';
 
-export const QuizCard = ({ title, id, userQuizzes = false }) => {
+export const QuizCard = ({ title, id, userQuizzes = false, fetchQuizzes }) => {
     const navigate = useNavigate();
+    const { displayMessage } = useMessage();
+
+    const handleDelete = () => {
+        doApiCall('DELETE', `/api/quiz/${id}`).catch(e => {
+            console.log(e);
+            displayMessage('Quiz deletion failed', false);
+        });
+        fetchQuizzes();
+        displayMessage('Quiz deleted successfully', true);
+    };
     return (
         <Card
             sx={{ display: 'flex', cursor: 'pointer' }}
@@ -13,7 +26,7 @@ export const QuizCard = ({ title, id, userQuizzes = false }) => {
                     : navigate(`/quiz/${id}`)
             }
         >
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                 <QuizIcon
                     color="primary"
                     sx={{ fontSize: '100px', padding: '16px' }}
@@ -30,9 +43,22 @@ export const QuizCard = ({ title, id, userQuizzes = false }) => {
                         Mac Miller
                     </Typography>
                 </CardContent>
-                <Box
-                    sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}
-                ></Box>
+                {userQuizzes && (
+                    <IconButton
+                        onClick={e => {
+                            e.stopPropagation();
+                            handleDelete();
+                        }}
+                        sx={{
+                            justifySelf: 'flex-end',
+                            height: 'min-content',
+                            marginTop: '16px',
+                            marginRight: '16px'
+                        }}
+                    >
+                        <ClearIcon color="error" />
+                    </IconButton>
+                )}
             </Box>
         </Card>
     );
