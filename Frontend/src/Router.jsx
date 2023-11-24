@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Button, CircularProgress, Container, Typography } from '@mui/material';
+import { CircularProgress, Container } from '@mui/material';
 import { HomePage } from './pages/HomePage.jsx';
 import { MenuBar } from './components/MenuBar.jsx';
 import { QuizPageContainer } from './containers/QuizPageContainer.jsx';
@@ -8,9 +7,7 @@ import { QuizzesListContainer } from './containers/QuizzesListContainer.jsx';
 import { Footer } from './components/Footer.jsx';
 import { ProfilePage } from './pages/ProfilePage.jsx';
 import { QuizCreatePage } from './pages/QuizCreatePage.jsx';
-import { QuizStatsPage } from './pages/QuizStatsPage.jsx';
 import { useAuth0 } from '@auth0/auth0-react';
-import LoginIcon from '@mui/icons-material/Login';
 import { Redirect } from './components/Redirect.jsx';
 import { QuizStatsPageContainer } from './containers/QuizStatsPageContainer.jsx';
 

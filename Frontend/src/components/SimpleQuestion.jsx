@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { TextField, Typography } from '@mui/material';
 
 export const SimpleQuestion = ({ question, setAnswer }) => {

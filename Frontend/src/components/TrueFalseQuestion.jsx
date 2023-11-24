@@ -9,7 +9,7 @@ export const TrueFalseQuestion = ({ question, setAnswer }) => {
             return;
         }
         setAnswer(localAnswer.toString());
-    }, [localAnswer]);
+    }, [localAnswer, setAnswer]);
     return (
         <>
             <Typography variant="h5">{question}</Typography>

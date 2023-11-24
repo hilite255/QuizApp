@@ -37,7 +37,7 @@ export const QuestionCreateCard = ({ setParams, removeQuestion }) => {
             options,
             score
         });
-    }, [question, type, answer, options, score]);
+    }, [question, type, answer, options, score, setParams]);
 
     const handleOptionsChange = (index, value) => {
         setOptions(prevState => {
@@ -64,7 +64,7 @@ export const QuestionCreateCard = ({ setParams, removeQuestion }) => {
                         onChange={handleTypeChange}
                     >
                         {Object.keys(QUESTION_DISPLAY_TYPES).map(key => (
-                            <MenuItem value={QUESTION_TYPES[key]}>
+                            <MenuItem value={QUESTION_TYPES[key]} key={key}>
                                 {QUESTION_DISPLAY_TYPES[key]}
                             </MenuItem>
                         ))}
@@ -85,6 +85,7 @@ export const QuestionCreateCard = ({ setParams, removeQuestion }) => {
                                     display: 'flex',
                                     alignItems: 'center'
                                 }}
+                                key={value}
                             >
                                 <Button
                                     onClick={() =>

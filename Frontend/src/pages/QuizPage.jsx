@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, MobileStepper, Stack, Typography } from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { QuestionContainer } from '../components/QuestionContainer.jsx';
@@ -23,7 +23,7 @@ export const QuizPage = ({ questions, title, time, id }) => {
     const handleBack = () => {
         setActiveStep(prevActiveStep => prevActiveStep - 1);
     };
-    const handleSubmit = () => {
+    const handleSubmit = useCallback(() => {
         setHasEnded(true);
         doApiCall('POST', `/api/submission/submit/${id}`, {
             answers
@@ -37,7 +37,7 @@ export const QuizPage = ({ questions, title, time, id }) => {
                 displayMessage('Quiz submission failed', false);
                 console.log(err);
             });
-    };
+    }, [navigate, displayMessage, answers, id]);
 
     //useEffect for timer
     useEffect(() => {
@@ -54,7 +54,7 @@ export const QuizPage = ({ questions, title, time, id }) => {
         if (remainingTime === 0) {
             handleSubmit();
         }
-    }, [remainingTime]);
+    }, [remainingTime, handleSubmit]);
 
     return (
         <div style={{ marginTop: '48px' }}>

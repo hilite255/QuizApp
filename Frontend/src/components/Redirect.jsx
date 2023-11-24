@@ -6,7 +6,7 @@ export const Redirect = ({ to }) => {
 
     useEffect(() => {
         navigate(to);
-    }, [to]);
+    }, [to, navigate]);
 
     return null;
 };

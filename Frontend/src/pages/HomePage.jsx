@@ -1,4 +1,4 @@
-import { Button, Grid, IconButton, Typography } from '@mui/material';
+import { Grid, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PetsIcon from '@mui/icons-material/Pets';
 import PersonIcon from '@mui/icons-material/Person';

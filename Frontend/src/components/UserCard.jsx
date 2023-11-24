@@ -1,4 +1,3 @@
-import React from 'react';
 import Card from '@mui/material/Card';
 import { Avatar, Stack, Typography, Box } from '@mui/material';
 import { useAuth } from '../hooks/useAuth.jsx';

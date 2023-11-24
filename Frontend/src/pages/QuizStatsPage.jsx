@@ -14,7 +14,8 @@ export const QuizStatsPage = ({ data }) => {
                 return (
                     <PieChart
                         data={question.answers}
-                        title={question.question}
+                        title={question.text}
+                        key={question.text}
                     />
                 );
             })}

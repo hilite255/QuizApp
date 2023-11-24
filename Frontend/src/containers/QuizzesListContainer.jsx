@@ -17,7 +17,7 @@ export const QuizzesListContainer = ({ userQuizzes }) => {
         );
         setTotalPages(Math.ceil(data.count / pageSize));
         setQuizzes(data.quizzes);
-    }, [userQuizzes, page]);
+    }, [userQuizzes, page, pageSize]);
 
     useEffect(() => {
         (async () => {

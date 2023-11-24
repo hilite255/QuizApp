@@ -8,7 +8,7 @@ export const MultipleChoiceQuestion = ({ question, options, setAnswer }) => {
 
     useEffect(() => {
         setAnswer(selectedChoice.join(','));
-    }, [selectedChoice]);
+    }, [selectedChoice, setAnswer]);
 
     return (
         <>
@@ -46,6 +46,7 @@ export const MultipleChoiceQuestion = ({ question, options, setAnswer }) => {
                                 ]);
                             }
                         }}
+                        key={option}
                     >
                         {CHOICES[index]}
                         <Typography
