@@ -1,8 +1,17 @@
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import {
+    Alert,
+    Button,
+    Grid,
+    Snackbar,
+    TextField,
+    Typography
+} from '@mui/material';
 import { useState } from 'react';
 import { QuestionCreateCard } from '../components/QuestionCreateCard.jsx';
 import AddIcon from '@mui/icons-material/Add';
 import { AXIOS_METHOD, doApiCall } from '../apiCall.js';
+import { useNavigate } from 'react-router-dom';
+import { useMessage } from '../hooks/useMessage.jsx';
 
 export const QuizCreatePage = () => {
     const [questions, setQuestions] = useState([]);
@@ -10,6 +19,8 @@ export const QuizCreatePage = () => {
     const [duration, setDuration] = useState(0);
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
+    const { displayMessage } = useMessage();
+    const navigate = useNavigate();
 
     const addQuestion = (question, type, answer, options, score) => {
         setQuestions([
@@ -18,14 +29,22 @@ export const QuizCreatePage = () => {
         ]);
     };
 
-    const handleSubmit = () => {
-        doApiCall(AXIOS_METHOD.POST, '/api/quiz/create', {
-            title,
-            questions,
-            startTime: fromDate,
-            endTime: toDate,
-            duration: { seconds: duration }
-        }).catch(err => console.log(err));
+    const handleSubmit = async () => {
+        try {
+            await doApiCall(AXIOS_METHOD.POST, '/api/quiz/create', {
+                title,
+                questions,
+                startTime: fromDate,
+                endTime: toDate,
+                duration
+            });
+            displayMessage('Quiz created successfully', true);
+            navigate('/user');
+        } catch (e) {
+            console.log(e);
+            displayMessage('Quiz creation failed', false);
+            navigate('/user');
+        }
     };
 
     return (
