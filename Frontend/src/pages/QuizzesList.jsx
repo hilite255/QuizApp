@@ -1,7 +1,14 @@
 import { QuizCard } from '../components/QuizCard.jsx';
 import { Pagination, Stack } from '@mui/material';
 
-export const QuizzesList = ({ quizzes, userQuizzes = false }) => {
+export const QuizzesList = ({
+    quizzes,
+    userQuizzes = false,
+    page,
+    totalPages,
+    moveToPage,
+    fetchQuizzes
+}) => {
     return (
         <>
             <Stack gap={4}>
@@ -10,6 +17,7 @@ export const QuizzesList = ({ quizzes, userQuizzes = false }) => {
                         title={quiz.title}
                         id={quiz.id}
                         userQuizzes={userQuizzes}
+                        fetchQuizzes={fetchQuizzes}
                     />
                 ))}
             </Stack>
@@ -20,7 +28,16 @@ export const QuizzesList = ({ quizzes, userQuizzes = false }) => {
                     marginTop: '32px'
                 }}
             >
-                <Pagination count={10} shape="rounded" color="primary" />
+                <Pagination
+                    count={totalPages}
+                    shape="rounded"
+                    color="primary"
+                    page={page}
+                    onChange={(event, page) => {
+                        moveToPage(page);
+                        console.log(page);
+                    }}
+                />
             </div>
         </>
     );
