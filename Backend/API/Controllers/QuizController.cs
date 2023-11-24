@@ -22,7 +22,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<QuizWithQuestions>> GetQuiz(int id)
         {
-            var quiz = await dbcontext.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
+            var quiz = await dbcontext.Quizzes.Include(q => q.Creator).FirstOrDefaultAsync(q => q.Id == id);
             if (quiz == null)
             {
                 return BadRequest("Quiz doesn't exist with this id: " + id);
@@ -52,7 +52,7 @@ namespace API.Controllers
         public async Task<ActionResult<QuizListDTO>> ListQuizzes(int page, int perpage)
         {
             var count = dbcontext.Quizzes.Count();
-            var list = await dbcontext.Quizzes.Skip((page - 1) * perpage).Take(perpage).ToListAsync();
+            var list = await dbcontext.Quizzes.Skip((page - 1) * perpage).Take(perpage).Include(q => q.Creator).ToListAsync();
             return new QuizListDTO() { Count = count, Quizzes = list };
         }
 
