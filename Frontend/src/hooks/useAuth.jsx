@@ -10,7 +10,7 @@ const AuthContext = React.createContext();
 export function AuthContextProvider({ children }) {
     const { isLoading, getAccessTokenSilently, isAuthenticated } = useAuth0();
     const [dbUser, setDbUser] = useState(null);
-    const [isUserLoading, setIsUserLoading] = useState(true);
+    const [isUserLoading, setIsUserLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -18,6 +18,7 @@ export function AuthContextProvider({ children }) {
                 if (!isAuthenticated) {
                     return;
                 }
+                setIsUserLoading(true);
                 const accessToken = await getAccessTokenSilently();
                 localStorage.setItem('accessToken', accessToken);
                 const metadataResponse = await fetch(
