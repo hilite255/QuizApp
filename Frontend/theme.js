@@ -56,6 +56,15 @@ export default function constructTheme() {
                     }
                 }
             },
+            MuiAlert: {
+                styleOverrides: {
+                    root: {
+                        '& .MuiAlert-icon': {
+                            fontSize: '2.1rem'
+                        }
+                    }
+                }
+            },
             MuiButton: {
                 defaultProps: {
                     variant: 'contained'
