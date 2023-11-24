@@ -33,9 +33,7 @@ export const QuestionCreateCard = ({ setParams, removeQuestion }) => {
             question,
             type,
             answer:
-                type === QUESTION_DISPLAY_TYPES.MULTIPLE
-                    ? JSON.stringify(answer)
-                    : answer,
+                type === QUESTION_TYPES.MULTIPLE ? answer.join(',') : answer,
             options,
             score
         });
