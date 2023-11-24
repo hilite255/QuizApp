@@ -12,7 +12,7 @@ export const Redirect = ({ to }) => {
             false
         );
         navigate(to);
-    }, [to, navigate]);
+    }, [to, navigate, displayMessage]);
 
     return null;
 };
