@@ -17,21 +17,21 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <BrowserRouter>
             <ThemeProvider theme={theme}>
-                <Auth0Provider
-                    domain={AUTH0_CONFIG.DOMAIN}
-                    clientId={AUTH0_CONFIG.CLIENT_ID}
-                    authorizationParams={{
-                        redirect_uri: window.location.origin,
-                        audience: AUTH0_CONFIG.AUDIENCE,
-                        scope: 'openid profile email'
-                    }}
-                >
-                    <AuthContextProvider>
-                        <MessageContextProvider>
+                <MessageContextProvider>
+                    <Auth0Provider
+                        domain={AUTH0_CONFIG.DOMAIN}
+                        clientId={AUTH0_CONFIG.CLIENT_ID}
+                        authorizationParams={{
+                            redirect_uri: window.location.origin,
+                            audience: AUTH0_CONFIG.AUDIENCE,
+                            scope: 'openid profile email'
+                        }}
+                    >
+                        <AuthContextProvider>
                             <Router />
-                        </MessageContextProvider>
-                    </AuthContextProvider>
-                </Auth0Provider>
+                        </AuthContextProvider>
+                    </Auth0Provider>
+                </MessageContextProvider>
             </ThemeProvider>
         </BrowserRouter>
     </React.StrictMode>
