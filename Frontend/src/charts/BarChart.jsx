@@ -10,7 +10,7 @@ export const BarChart = ({ data, title }) => {
             <div style={{ width: '100%', height: '400px' }}>
                 <ResponsiveBar
                     data={data}
-                    keys={['correct', 'fail']}
+                    keys={['correct', 'wrong']}
                     indexBy="question"
                     margin={{ top: 50, right: 130, bottom: 60, left: 60 }}
                     padding={0.3}

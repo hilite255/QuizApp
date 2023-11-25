@@ -6,9 +6,9 @@ export const QUESTION_DISPLAY_TYPES = {
 };
 
 export const QUESTION_TYPES = {
-    SIMPLE: 'simple',
-    MULTIPLE: 'multipleChoice',
-    TRUE_FALSE: 'trueFalse'
+    SIMPLE: 'Simple',
+    MULTIPLE: 'MultipleChoice',
+    TRUE_FALSE: 'TrueFalse'
 };
 
 export const AUTH0_CONFIG = {
