@@ -19,6 +19,7 @@ export const QuizzesList = ({
                         userQuizzes={userQuizzes}
                         fetchQuizzes={fetchQuizzes}
                         key={quiz.id}
+                        creator={quiz.creator.name}
                     />
                 ))}
             </Stack>

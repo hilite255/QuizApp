@@ -14,7 +14,13 @@ import { useMessage } from '../hooks/useMessage.jsx';
 import Zoom from '@mui/material/Zoom';
 import { useState } from 'react';
 
-export const QuizCard = ({ title, id, userQuizzes = false, fetchQuizzes }) => {
+export const QuizCard = ({
+    title,
+    id,
+    userQuizzes = false,
+    fetchQuizzes,
+    creator
+}) => {
     const navigate = useNavigate();
     const { displayMessage } = useMessage();
     const [open, setOpen] = useState(false);
@@ -80,13 +86,15 @@ export const QuizCard = ({ title, id, userQuizzes = false, fetchQuizzes }) => {
                         <Typography component="div" variant="h5">
                             {title}
                         </Typography>
-                        <Typography
-                            variant="subtitle1"
-                            color="text.secondary"
-                            component="div"
-                        >
-                            Mac Miller
-                        </Typography>
+                        {!userQuizzes && (
+                            <Typography
+                                variant="subtitle1"
+                                color="text.secondary"
+                                component="div"
+                            >
+                                {`Created by ${creator}`}
+                            </Typography>
+                        )}
                     </CardContent>
                     {userQuizzes && (
                         <IconButton
