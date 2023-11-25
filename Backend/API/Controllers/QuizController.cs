@@ -52,7 +52,7 @@ namespace API.Controllers
         public async Task<ActionResult<QuizListDTO>> ListQuizzes(int page, int perpage)
         {
             var count = dbcontext.Quizzes.Count();
-            var list = await dbcontext.Quizzes.Skip((page - 1) * perpage).Take(perpage).Include(q => q.Creator).ToListAsync();
+            var list = await dbcontext.Quizzes.OrderByDescending(q => q.Id).Skip((page - 1) * perpage).Take(perpage).Include(q => q.Creator).ToListAsync();
             return new QuizListDTO() { Count = count, Quizzes = list };
         }
 
@@ -67,7 +67,7 @@ namespace API.Controllers
             }
             var userId = userIdClaim.Value;
             var count = dbcontext.Quizzes.Where(q => q.Creator.Id == userId).Count();
-            var list = await dbcontext.Quizzes.Where(q => q.Creator.Id == userId).Skip((page - 1) * perpage).Take(perpage).ToListAsync();
+            var list = await dbcontext.Quizzes.OrderByDescending(q => q.Id).Where(q => q.Creator.Id == userId).Skip((page - 1) * perpage).Take(perpage).Include(q => q.Creator).ToListAsync();
             return new QuizListDTO() { Count = count, Quizzes = list };
         }
 
@@ -133,7 +133,7 @@ namespace API.Controllers
         {
             var quizStats = new StatsDTO();
             var quiz = await dbcontext.Quizzes.Include(q => q.Creator).FirstAsync(q => q.Id == quizId);
-            var questions = await dbcontext.Questions.Where(q => q.Id == quiz.Id).ToListAsync();
+            var questions = await dbcontext.Questions.Where(q => q.Quiz.Id == quiz.Id).ToListAsync();
             quizStats.QuizId = quizId;
             quizStats.QuizTitle = quiz.Title;
             quizStats.Questions = new List<QuestionStatDTO>();
