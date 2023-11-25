@@ -10,9 +10,11 @@ import { QuizCreatePage } from './pages/QuizCreatePage.jsx';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Redirect } from './components/Redirect.jsx';
 import { QuizStatsPageContainer } from './containers/QuizStatsPageContainer.jsx';
+import { useAuth } from './hooks/useAuth.jsx';
 
 export const Router = () => {
     const { isLoading, isAuthenticated } = useAuth0();
+    const { user } = useAuth();
 
     if (isLoading) {
         return (
@@ -33,7 +35,7 @@ export const Router = () => {
         );
     }
 
-    if (!isLoading && !isAuthenticated) {
+    if (!isLoading && (!isAuthenticated || !user)) {
         return (
             <>
                 <MenuBar />

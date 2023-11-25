@@ -4,13 +4,16 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { CircularProgress, Container } from '@mui/material';
 import { AUTH0_CONFIG } from '../config.js';
 import { doApiCall } from '../apiCall.js';
+import { useMessage } from './useMessage.jsx';
 
 const AuthContext = React.createContext();
 
 export function AuthContextProvider({ children }) {
-    const { isLoading, getAccessTokenSilently, isAuthenticated } = useAuth0();
+    const { isLoading, getAccessTokenSilently, isAuthenticated, logout } =
+        useAuth0();
     const [dbUser, setDbUser] = useState(null);
     const [isUserLoading, setIsUserLoading] = useState(false);
+    const { displayMessage } = useMessage();
 
     useEffect(() => {
         (async () => {
@@ -42,8 +45,11 @@ export function AuthContextProvider({ children }) {
                 );
                 setDbUser(userFromBackend);
                 setIsUserLoading(false);
+                displayMessage('Logged in successfully', true);
             } catch (err) {
                 console.error(err);
+                displayMessage('Failed to login', false);
+                logout().catch(err => console.error(err));
                 setIsUserLoading(false);
             }
         })();
