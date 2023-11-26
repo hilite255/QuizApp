@@ -1,9 +1,8 @@
 ﻿using API.DbModels;
 using API.DTOs;
+using API.Services.Contract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace API.Controllers
@@ -12,10 +11,10 @@ namespace API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly DatabaseContext dbcontext;
-        public UserController(DatabaseContext dbcontext)
+        private readonly IUserService userService;
+        public UserController(IUserService userService)
         {
-            this.dbcontext = dbcontext;
+            this.userService = userService;
         }
 
         [HttpPost("login")]
@@ -28,19 +27,7 @@ namespace API.Controllers
                 throw new ArgumentNullException("Id", "Nincs Id a tokenben");
             }
             var id = idClaim.Value;
-            var user = await dbcontext.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null)
-            {
-                user = new DbUser
-                {
-                    Id = id,
-                    Name = userDetails.Name,
-                    Email = userDetails.Email,
-                };
-                await dbcontext.Users.AddAsync(user);
-                await dbcontext.SaveChangesAsync();
-            }
-            return user;
+            return await userService.Login(userDetails, id);
         }
     }
 }
