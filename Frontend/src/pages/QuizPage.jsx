@@ -28,9 +28,12 @@ export const QuizPage = ({ questions, title, time, id }) => {
         doApiCall('POST', `/api/submission/submit/${id}`, {
             answers
         })
-            .then(() => {
+            .then(res => {
                 navigate('/quizzes');
-                displayMessage('Quiz submitted successfully', true);
+                displayMessage(
+                    `Quiz submitted successfully! You got ${res.score} point!`,
+                    true
+                );
             })
             .catch(err => {
                 navigate('/quizzes');
